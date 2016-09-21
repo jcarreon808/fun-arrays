@@ -5,12 +5,14 @@ var dataset = require('./dataset.json');
   greater than 100000.00
   assign the resulting array to `hundredThousandairs`
 */
-var hundredThousandairs = null;
+var hundredThousandairs = dataset.bankBalances.filter((element, index, array)=>{
+  return element.amount >= 100000;
+});
 
 /*
   set a new key for each object in bankBalances named `rounded`
   the value of this key will be the `amount` rounded to the nearest dollar
-  example 
+  example
     {
       "amount": "134758.44",
       "state": "HI",
@@ -18,22 +20,36 @@ var hundredThousandairs = null;
     }
   assign the resulting array to `roundedDollar`
 */
-var roundedDollar = null;
+var roundedDollar = dataset.bankBalances.map((account)=>{
+  return{
+    "amount": account.amount,
+    "state": account.state,
+    "rounded":Math.round(account.amount)
+  };
+});
 
 /*
   set a the `amount` value for each object in bankBalances
   to the value of `amount` rounded to the nearest 10 cents
-  example 
+  example
     {
       "amount": 134758.4,
       "state": "HI"
     }
   assign the resulting array to `roundedDime`
 */
-var roundedDime = null;
+var roundedDime = dataset.bankBalances.map((account)=>{
+  return {
+    'amount':Math.round(account.amount*10)/10,
+    'state': account.state
+  };
+});
 
 // set sumOfBankBalances to the sum of all amounts in bankBalances
-var sumOfBankBalances = null;
+var sumOfBankBalances = dataset.bankBalances.reduce((previous,current,index, array)=>{
+  let sum = previous + parseFloat(current.amount);
+  return Math.round(sum*100)/100;
+},0);
 
 /*
   set sumOfInterests to the sum of the 18.9% interest
@@ -77,14 +93,14 @@ var stateSums = null;
 
 /*
   set lowerSumStates to an array containing
-  only the two letter state abbreviation of each state 
+  only the two letter state abbreviation of each state
   where the sum of amounts in the state is
     less than 1,000,000
  */
 var lowerSumStates = null;
 
 /*
-  set higherStateSums to be the sum of 
+  set higherStateSums to be the sum of
     all amounts of every state
     where the sum of amounts in the state is
       greater than 1,000,000
@@ -107,7 +123,7 @@ var areStatesInHigherStateSum = null;
 
 /*
   Stretch Goal && Final Boss
-  
+
   set anyStatesInHigherStateSum to be true if
     any of these states have a sum of account values
       greater than 2,550,000
